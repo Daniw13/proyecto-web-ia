@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Explorador de personajes de Rick and Morty con búsqueda, filtros y favoritos." />
+  <title>Rick & Morty · Explorador</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <h1 class="brand"><span class="brand__dot" aria-hidden="true"></span>Rick & Morty</h1>
+
+      <!-- Segment control: vista -->
+      <div class="segment" role="group" aria-label="Vista" id="viewSeg">
+        <button class="segment__btn is-active" data-view="all" aria-pressed="true">Todos</button>
+        <button class="segment__btn" data-view="favs" aria-pressed="false">Favoritos <span id="favCount" class="pill">0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="controls" aria-label="Búsqueda y filtros">
+      <label class="search">
+        <span class="sr-only">Buscar personaje por nombre</span>
+        <input id="searchInput" type="search" placeholder="Buscar por nombre…" autocomplete="off" />
+      </label>
+
+      <!-- Historial de búsquedas (reto extra) -->
+      <div id="history" class="history" hidden>
+        <span class="history__label">Recientes</span>
+        <div id="historyChips" class="history__chips"></div>
+        <button id="clearHistory" class="link-btn" type="button">Borrar</button>
+      </div>
+
+      <div class="filters">
+        <div class="segment" role="group" aria-label="Estado" id="statusSeg">
+          <button class="segment__btn is-active" data-status="" aria-pressed="true">Todos</button>
+          <button class="segment__btn" data-status="alive" aria-pressed="false">Alive</button>
+          <button class="segment__btn" data-status="dead" aria-pressed="false">Dead</button>
+          <button class="segment__btn" data-status="unknown" aria-pressed="false">Unknown</button>
+        </div>
+
+        <label class="select">
+          <span class="sr-only">Género</span>
+          <select id="genderSelect">
+            <option value="">Todos los géneros</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="genderless">Genderless</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <!-- Estados: vacío / error -->
+    <div id="message" class="message" role="status" aria-live="polite" hidden></div>
+
+    <section id="grid" class="grid" aria-live="polite" aria-busy="false"></section>
+
+    <nav id="pager" class="pager" aria-label="Paginación" hidden>
+      <button id="prevBtn" class="btn">‹ Anterior</button>
+      <span id="pageInfo" class="pager__info"></span>
+      <button id="nextBtn" class="btn">Siguiente ›</button>
+    </nav>
+  </main>
+
+  <footer class="footer">Datos de <a href="https://rickandmortyapi.com" target="_blank" rel="noopener">rickandmortyapi.com</a></footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
