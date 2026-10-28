@@ -2,9 +2,8 @@
 
 /* ============ Configuración y estado ============ */
 const API = 'https://rickandmortyapi.com/api/character';
-const KEYS = { favs: 'rm:favorites', history: 'rm:history' };
-const MAX_HISTORY = 6;
 const KEYS = { favs: 'rm:favorites', history: 'rm:history', theme: 'rm:theme' };
+const MAX_HISTORY = 6;
 
 const $ = (sel) => document.querySelector(sel);
 const grid = $('#grid'), message = $('#message'), pager = $('#pager');
@@ -24,11 +23,11 @@ const store = {
 };
 
 let favorites = store.get(KEYS.favs, []); // guardamos el objeto reducido, no solo el id,
-                                          // así la pestaña Favoritos funciona sin llamar a la API.
+                                         // así la pestaña Favoritos funciona sin llamar a la API.
 
 /* ============ fetch() asíncrono ============
    - URLSearchParams arma la query (?page=1&name=rick&status=alive).
-   - AbortController cancela la petición anterior si el usuario sigue escribiendo.
+   - AbortController cancela la petición anterior si el usuario sigue tecleando.
    - La API responde 404 cuando no hay resultados: lo tratamos como "estado vacío", no como error. */
 let controller;
 async function loadCharacters() {
@@ -53,6 +52,7 @@ async function loadCharacters() {
     renderPager();
   } catch (err) {
     if (err.name === 'AbortError') return; // petición cancelada a propósito
+    message.hidden = true;                 // aseguramos limpiar errores previos
     showMessage('error');                  // sin conexión o API caída
   }
 }
@@ -189,8 +189,8 @@ $('#clearHistory').addEventListener('click', () => { store.set(KEYS.history, [])
 function bindSegment(selector, onPick) {
   $(selector).addEventListener('click', (e) => {
     const btn = e.target.closest('.segment__btn');
-    if (!btn) return;
-    $(selector).querySelectorAll('.segment__btn').forEach((b) => {
+    if (!btn || btn.id === 'themeToggle') return; // Evita interferir con el botón de tema
+    $(selector).querySelectorAll('.segment__btn:not(#themeToggle)').forEach((b) => {
       b.classList.toggle('is-active', b === btn);
       b.setAttribute('aria-pressed', b === btn);
     });
@@ -198,7 +198,9 @@ function bindSegment(selector, onPick) {
   });
 }
 bindSegment('#statusSeg', (d) => applyFilters({ status: d.status }));
-bindSegment('#viewSeg', (d) => applyFilters({ view: d.view }));
+bindSegment('#viewSeg', (d) => {
+  if (d.view) applyFilters({ view: d.view });
+});
 
 $('#genderSelect').addEventListener('change', (e) => applyFilters({ gender: e.target.value }));
 
@@ -212,22 +214,24 @@ $('#prevBtn').addEventListener('click', () => { state.page--; loadCharacters(); 
 $('#nextBtn').addEventListener('click', () => { state.page++; loadCharacters(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 message.addEventListener('click', (e) => e.target.id === 'retryBtn' && loadCharacters());
 
-/* ============ Init ============ */
-updateFavCount();
-renderHistory();
-loadCharacters();
-
 /* ============ Modo Oscuro / Claro (Reto Extra) ============ */
 const themeToggleBtn = $('#themeToggle');
 const savedTheme = store.get(KEYS.theme, 'light');
 
 if (savedTheme === 'dark') {
   document.body.classList.add('dark-mode');
-  themeToggleBtn.textContent = '☀️';
+  if (themeToggleBtn) themeToggleBtn.textContent = '☀️';
 }
 
-themeToggleBtn.addEventListener('click', () => {
-  const isDark = document.body.classList.toggle('dark-mode');
-  themeToggleBtn.textContent = isDark ? '☀️' : '🌙';
-  store.set(KEYS.theme, isDark ? 'dark' : 'light');
-});
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark-mode');
+    themeToggleBtn.textContent = isDark ? '☀️' : '🌙';
+    store.set(KEYS.theme, isDark ? 'dark' : 'light');
+  });
+}
+
+/* ============ Init ============ */
+updateFavCount();
+renderHistory();
+loadCharacters();
