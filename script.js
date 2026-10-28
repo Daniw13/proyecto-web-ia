@@ -4,6 +4,7 @@
 const API = 'https://rickandmortyapi.com/api/character';
 const KEYS = { favs: 'rm:favorites', history: 'rm:history' };
 const MAX_HISTORY = 6;
+const KEYS = { favs: 'rm:favorites', history: 'rm:history', theme: 'rm:theme' };
 
 const $ = (sel) => document.querySelector(sel);
 const grid = $('#grid'), message = $('#message'), pager = $('#pager');
@@ -215,3 +216,18 @@ message.addEventListener('click', (e) => e.target.id === 'retryBtn' && loadChara
 updateFavCount();
 renderHistory();
 loadCharacters();
+
+/* ============ Modo Oscuro / Claro (Reto Extra) ============ */
+const themeToggleBtn = $('#themeToggle');
+const savedTheme = store.get(KEYS.theme, 'light');
+
+if (savedTheme === 'dark') {
+  document.body.classList.add('dark-mode');
+  themeToggleBtn.textContent = '☀️';
+}
+
+themeToggleBtn.addEventListener('click', () => {
+  const isDark = document.body.classList.toggle('dark-mode');
+  themeToggleBtn.textContent = isDark ? '☀️' : '🌙';
+  store.set(KEYS.theme, isDark ? 'dark' : 'light');
+});
