@@ -183,3 +183,67 @@ body {
   .segment { width: 100%; } .segment__btn { flex: 1; padding: 8px 10px; }
   .skeleton { height: 250px; }
 }
+
+/* Modo Oscuro (Dark Theme) */
+body.dark-mode {
+  --bg: #121418;
+  --surface: #1e2229;
+  --olive: #e1e4e8;
+  --brown: #a0aab2;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode {
+  background: radial-gradient(circle at top center, #1a2634 0%, var(--bg) 600px);
+}
+
+body.dark-mode .topbar {
+  background: rgba(30, 34, 41, 0.82);
+  border-bottom: 1px solid rgba(138, 216, 232, 0.1);
+}
+
+body.dark-mode .brand {
+  color: #ffffff;
+}
+
+body.dark-mode .segment {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.04);
+}
+
+body.dark-mode .segment__btn.is-active {
+  background: #2c323d;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .search input, 
+body.dark-mode .select select,
+body.dark-mode .history,
+body.dark-mode .message,
+body.dark-mode .card {
+  background: var(--surface);
+  color: var(--olive);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .card__name {
+  color: #ffffff;
+}
+
+body.dark-mode .chip {
+  background: #2c323d;
+  color: var(--olive);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .skeleton {
+  background: linear-gradient(90deg, #252b35 25%, #2f3744 50%, #252b35 75%);
+}
+
+body.dark-mode .fav {
+  background: rgba(30, 34, 41, 0.85);
+  color: #a0aab2;
+  border-color: rgba(255, 255, 255, 0.15);
+}
